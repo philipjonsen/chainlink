@@ -1,0 +1,49 @@
+version = 1
+
+[[analyzers]]
+name = "rust"
+
+  [analyzers.meta]
+  msrv = "stable"
+
+[[analyzers]]
+name = "kube-linter"
+type = "community"
+
+[[analyzers]]
+name = "slither"
+type = "community"
+
+[[analyzers]]
+name = "dart-analyze"
+type = "community"
+
+[[analyzers]]
+name = "solhint"
+type = "community"
+
+[[analyzers]]
+name = "docker"
+
+[[analyzers]]
+name = "secrets"
+
+[[analyzers]]
+name = "cfn-lint"
+type = "community"
+
+[[analyzers]]
+name = "shell"
+
+[[analyzers]]
+name = "go"
+
+  [analyzers.meta]
+  import_root = "github.com/philipjonsen/chainlink"
+  dependencies_vendored = true
+
+[[transformers]]
+name = "gofumpt"
+
+[[transformers]]
+name = "gofmt"
