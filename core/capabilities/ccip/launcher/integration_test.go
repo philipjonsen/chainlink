@@ -118,5 +118,7 @@ func (o *oracleCreatorPrints) Type() cctypes.OracleType {
 	return cctypes.OracleTypePlugin
 }
 
-var _ cctypes.OracleCreator = &oracleCreatorPrints{}
-var _ cctypes.CCIPOracle = &oraclePrints{}
+var (
+	_ cctypes.OracleCreator = &oracleCreatorPrints{}
+	_ cctypes.CCIPOracle    = &oraclePrints{}
+)

@@ -129,7 +129,8 @@ func (_c *OracleCreator_Type_Call) RunAndReturn(run func() types.OracleType) *Or
 func NewOracleCreator(t interface {
 	mock.TestingT
 	Cleanup(func())
-}) *OracleCreator {
+},
+) *OracleCreator {
 	mock := &OracleCreator{}
 	mock.Mock.Test(t)
 

@@ -303,7 +303,7 @@ func DeployChainContracts(
 				mcm.Address,
 				// TODO: Actual MCM groups need to be parameterized.
 				[]common.Address{mcm.Address},            // proposers
-				[]common.Address{chain.DeployerKey.From}, //executors
+				[]common.Address{chain.DeployerKey.From}, // executors
 				[]common.Address{mcm.Address},            // cancellers
 				[]common.Address{mcm.Address},            // bypassers
 			)
