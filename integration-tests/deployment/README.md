@@ -20,7 +20,6 @@ environments like testnet/mainnet.
 - EVM only
 
 /deployment/devenv
-- Coming soon
 - package name `devenv`
 - Docker environment for higher fidelity testing
 - Support non-EVMs (yet to be implemented)
@@ -36,23 +35,36 @@ environments like testnet/mainnet.
 - package name `changeset` imported as `ccipchangesets`
 - These function like scripts describing state transitions
   you wish to apply to _persistent_ environments like testnet/mainnet
-- Ordered list of Go functions following the format
+- They should be go functions where the first argument is an
+  environment and the second argument is a config struct which can be unique to the 
+  changeset. The return value should be a `deployment.ChangesetOutput` and an error.
 ```Go
-0001_descriptive_name.go
-func Apply0001(env deployment.Environment, c ccipdeployment.Config) (deployment.ChangesetOutput, error)
+do_something.go
+func DoSomethingChangeSet(env deployment.Environment, c ccipdeployment.Config) (deployment.ChangesetOutput, error)
 {
     // Deploy contracts, generate MCMS proposals, generate
     // job specs according to contracts etc.
     return deployment.ChangesetOutput{}, nil
 }
-0001_descriptive_name_test.go
-func TestApply0001(t *testing.T)
+do_something_test.go
+func TestDoSomething(t *testing.T)
 {
     // Set up memory env
-    // Apply0001 function
+    // DoSomethingChangeSet function
     // Take the artifacts from ChangeSet output
     // Apply them to the memory env
     // Send traffic, run assertions etc.
 }
 ```
 - Changesets are exposed and applied via a different repo. 
+
+/deployment/llo
+- package name `llodeployment`
+- Similar to /deploymet/ccip, these are product-specific deployment/configuration workflows
+- Tests can use deployment/memory for fast integration testing
+
+/deployment/llo/changeset
+- package name `changeset` imported as `llochangesets`
+- Similar to deployment/ccip/changesets
+- These function like scripts describing state transitions
+  you wish to apply to _persistent_ environments like testnet/mainnet

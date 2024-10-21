@@ -13,6 +13,7 @@ import (
 var (
 	ErrInvalidChainSelector = fmt.Errorf("invalid chain selector")
 	ErrInvalidAddress       = fmt.Errorf("invalid address")
+	ErrChainNotFound        = fmt.Errorf("chain not found")
 )
 
 // ContractType is a simple string type for identifying contract types.
@@ -87,10 +88,11 @@ type AddressBookMap struct {
 	AddressesByChain map[uint64]map[string]TypeAndVersion
 }
 
+// Save will save an address for a given chain selector. It will error if there is a conflicting existing address.
 func (m *AddressBookMap) Save(chainSelector uint64, address string, typeAndVersion TypeAndVersion) error {
 	_, exists := chainsel.ChainBySelector(chainSelector)
 	if !exists {
-		return errors.Wrapf(ErrInvalidChainSelector, "chain selector %d not found", chainSelector)
+		return errors.Wrapf(ErrInvalidChainSelector, "chain selector %d", chainSelector)
 	}
 	if address == "" || address == common.HexToAddress("0x0").Hex() {
 		return errors.Wrap(ErrInvalidAddress, "address cannot be empty")
@@ -119,14 +121,19 @@ func (m *AddressBookMap) Addresses() (map[uint64]map[string]TypeAndVersion, erro
 	return m.AddressesByChain, nil
 }
 
-func (m *AddressBookMap) AddressesForChain(chain uint64) (map[string]TypeAndVersion, error) {
-	if _, exists := m.AddressesByChain[chain]; !exists {
-		return nil, fmt.Errorf("chain %d not found", chain)
+func (m *AddressBookMap) AddressesForChain(chainSelector uint64) (map[string]TypeAndVersion, error) {
+	_, exists := chainsel.ChainBySelector(chainSelector)
+	if !exists {
+		return nil, errors.Wrapf(ErrInvalidChainSelector, "chain selector %d", chainSelector)
 	}
-	return m.AddressesByChain[chain], nil
+	if _, exists := m.AddressesByChain[chainSelector]; !exists {
+		return nil, errors.Wrapf(ErrChainNotFound, "chain selector %d", chainSelector)
+	}
+	return m.AddressesByChain[chainSelector], nil
 }
 
-// Attention this will mutate existing book
+// Merge will merge the addresses from another address book into this one.
+// It will error on any existing addresses.
 func (m *AddressBookMap) Merge(ab AddressBook) error {
 	addresses, err := ab.Addresses()
 	if err != nil {
@@ -155,4 +162,20 @@ func NewMemoryAddressBookFromMap(addressesByChain map[uint64]map[string]TypeAndV
 	return &AddressBookMap{
 		AddressesByChain: addressesByChain,
 	}
+}
+
+// SearchAddressBook search an address book for a given chain and contract type and return the first matching address.
+func SearchAddressBook(ab AddressBook, chain uint64, typ ContractType) (string, error) {
+	addrs, err := ab.AddressesForChain(chain)
+	if err != nil {
+		return "", err
+	}
+
+	for addr, tv := range addrs {
+		if tv.Type == typ {
+			return addr, nil
+		}
+	}
+
+	return "", fmt.Errorf("not found")
 }

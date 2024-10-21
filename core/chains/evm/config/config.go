@@ -11,6 +11,7 @@ import (
 
 	"github.com/smartcontractkit/chainlink/v2/core/chains/evm/assets"
 	"github.com/smartcontractkit/chainlink/v2/core/chains/evm/config/chaintype"
+	"github.com/smartcontractkit/chainlink/v2/core/chains/evm/config/toml"
 	"github.com/smartcontractkit/chainlink/v2/core/chains/evm/types"
 )
 
@@ -76,6 +77,7 @@ type HeadTracker interface {
 	SamplingInterval() time.Duration
 	FinalityTagBypass() bool
 	MaxAllowedFinalityDepth() uint32
+	PersistenceEnabled() bool
 }
 
 type BalanceMonitor interface {
@@ -140,6 +142,7 @@ type GasEstimator interface {
 	Mode() string
 	PriceMaxKey(gethcommon.Address) *assets.Wei
 	EstimateLimit() bool
+	DAOracle() DAOracle
 }
 
 type LimitJobType interface {
@@ -159,6 +162,12 @@ type BlockHistory interface {
 	CheckInclusionPercentile() uint16
 	EIP1559FeeCapBufferBlocks() uint16
 	TransactionPercentile() uint16
+}
+
+type DAOracle interface {
+	OracleType() toml.DAOracleType
+	OracleAddress() *types.EIP55Address
+	CustomGasPriceCalldata() string
 }
 
 type FeeHistory interface {
@@ -182,6 +191,7 @@ type NodePool interface {
 	Errors() ClientErrors
 	EnforceRepeatableRead() bool
 	DeathDeclarationDelay() time.Duration
+	NewHeadsPollInterval() time.Duration
 }
 
 // TODO BCF-2509 does the chainscopedconfig really need the entire app config?

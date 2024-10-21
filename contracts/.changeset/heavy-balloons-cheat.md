@@ -1,9 +1,9 @@
 ---
-"chainlink": patch
+'@chainlink/contracts': patch
 ---
 
 #added Add ZKSync L2EP SequencerUptimeFeed contract
 #added Add ZKSync L2EP Validator contract
 
 
-SHIP-3004
+PR issue: SHIP-3004

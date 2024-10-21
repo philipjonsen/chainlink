@@ -26,7 +26,6 @@ import (
 	"github.com/smartcontractkit/chainlink-common/pkg/utils"
 	"github.com/smartcontractkit/chainlink-common/pkg/utils/jsonserializable"
 	"github.com/smartcontractkit/chainlink-common/pkg/utils/mailbox"
-
 	"github.com/smartcontractkit/chainlink/v2/core/bridges"
 	"github.com/smartcontractkit/chainlink/v2/core/build"
 	"github.com/smartcontractkit/chainlink/v2/core/capabilities"
@@ -53,6 +52,7 @@ import (
 	"github.com/smartcontractkit/chainlink/v2/core/services/job"
 	"github.com/smartcontractkit/chainlink/v2/core/services/keeper"
 	"github.com/smartcontractkit/chainlink/v2/core/services/keystore"
+	"github.com/smartcontractkit/chainlink/v2/core/services/llo"
 	"github.com/smartcontractkit/chainlink/v2/core/services/ocr"
 	"github.com/smartcontractkit/chainlink/v2/core/services/ocr2"
 	"github.com/smartcontractkit/chainlink/v2/core/services/ocrbootstrap"
@@ -183,9 +183,11 @@ type ApplicationOpts struct {
 	LoopRegistry               *plugins.LoopRegistry
 	GRPCOpts                   loop.GRPCOpts
 	MercuryPool                wsrpc.Pool
+	RetirementReportCache      llo.RetirementReportCache
 	CapabilitiesRegistry       *capabilities.Registry
 	CapabilitiesDispatcher     remotetypes.Dispatcher
 	CapabilitiesPeerWrapper    p2ptypes.PeerWrapper
+	NewOracleFactoryFn         standardcapabilities.NewOracleFactoryFn
 }
 
 // NewApplication initializes a new store if one is not already
@@ -334,6 +336,9 @@ func NewApplication(opts ApplicationOpts) (Application, error) {
 	if opts.MercuryPool != nil {
 		srvcs = append(srvcs, opts.MercuryPool)
 	}
+	if opts.RetirementReportCache != nil {
+		srvcs = append(srvcs, opts.RetirementReportCache)
+	}
 
 	// EVM chains are used all over the place. This will need to change for fully EVM extraction
 	// TODO: BCF-2510, BCF-2511
@@ -453,15 +458,6 @@ func NewApplication(opts ApplicationOpts) (Application, error) {
 				pipelineRunner,
 				cfg.JobPipeline(),
 			),
-			job.StandardCapabilities: standardcapabilities.NewDelegate(
-				globalLogger,
-				opts.DS, jobORM,
-				opts.CapabilitiesRegistry,
-				loopRegistrarConfig,
-				telemetryManager,
-				pipelineRunner,
-				opts.RelayerChainInteroperators,
-				gatewayConnectorWrapper),
 		}
 		webhookJobRunner = delegates[job.Webhook].(*webhook.Delegate).WebhookJobRunner()
 	)
@@ -501,6 +497,21 @@ func NewApplication(opts ApplicationOpts) (Application, error) {
 		return nil, fmt.Errorf("P2P stack required for OCR or OCR2")
 	}
 
+	// If peer wrapper is initialized, Oracle Factory dependency will be available to standard capabilities
+	delegates[job.StandardCapabilities] = standardcapabilities.NewDelegate(
+		globalLogger,
+		opts.DS, jobORM,
+		opts.CapabilitiesRegistry,
+		loopRegistrarConfig,
+		telemetryManager,
+		pipelineRunner,
+		opts.RelayerChainInteroperators,
+		gatewayConnectorWrapper,
+		keyStore,
+		peerWrapper,
+		opts.NewOracleFactoryFn,
+	)
+
 	if cfg.OCR().Enabled() {
 		delegates[job.OffchainReporting] = ocr.NewDelegate(
 			opts.DS,
@@ -524,22 +535,25 @@ func NewApplication(opts ApplicationOpts) (Application, error) {
 		ocr2DelegateConfig := ocr2.NewDelegateConfig(cfg.OCR2(), cfg.Mercury(), cfg.Threshold(), cfg.Insecure(), cfg.JobPipeline(), loopRegistrarConfig)
 
 		delegates[job.OffchainReporting2] = ocr2.NewDelegate(
-			opts.DS,
-			jobORM,
-			bridgeORM,
-			mercuryORM,
-			pipelineRunner,
-			streamRegistry,
-			peerWrapper,
-			telemetryManager,
-			legacyEVMChains,
-			globalLogger,
+			ocr2.DelegateOpts{
+				Ds:                    opts.DS,
+				JobORM:                jobORM,
+				BridgeORM:             bridgeORM,
+				MercuryORM:            mercuryORM,
+				PipelineRunner:        pipelineRunner,
+				StreamRegistry:        streamRegistry,
+				PeerWrapper:           peerWrapper,
+				MonitoringEndpointGen: telemetryManager,
+				LegacyChains:          legacyEVMChains,
+				Lggr:                  globalLogger,
+				Ks:                    keyStore.OCR2(),
+				EthKs:                 keyStore.Eth(),
+				Relayers:              opts.RelayerChainInteroperators,
+				MailMon:               mailMon,
+				CapabilitiesRegistry:  opts.CapabilitiesRegistry,
+				RetirementReportCache: opts.RetirementReportCache,
+			},
 			ocr2DelegateConfig,
-			keyStore.OCR2(),
-			keyStore.Eth(),
-			opts.RelayerChainInteroperators,
-			mailMon,
-			opts.CapabilitiesRegistry,
 		)
 		delegates[job.Bootstrap] = ocrbootstrap.NewDelegateBootstrap(
 			opts.DS,
@@ -554,13 +568,13 @@ func NewApplication(opts ApplicationOpts) (Application, error) {
 			globalLogger,
 			loopRegistrarConfig,
 			pipelineRunner,
-			opts.RelayerChainInteroperators.LegacyEVMChains(),
 			relayerChainInterops,
 			opts.KeyStore,
 			opts.DS,
 			peerWrapper,
 			telemetryManager,
 			cfg.Capabilities(),
+			cfg.EVMConfigs(),
 		)
 	} else {
 		globalLogger.Debug("Off-chain reporting v2 disabled")

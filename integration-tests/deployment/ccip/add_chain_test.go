@@ -6,9 +6,10 @@ import (
 
 	"github.com/ethereum/go-ethereum/common"
 
-	"github.com/smartcontractkit/chainlink-ccip/pluginconfig"
+	"github.com/smartcontractkit/chainlink/v2/core/gethwrappers/ccip/generated/rmn_home"
 
-	cciptypes "github.com/smartcontractkit/chainlink-common/pkg/types/ccipocr3"
+	cciptypes "github.com/smartcontractkit/chainlink-ccip/pkg/types/ccipocr3"
+	"github.com/smartcontractkit/chainlink-ccip/pluginconfig"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -24,8 +25,7 @@ import (
 
 func TestAddChainInbound(t *testing.T) {
 	// 4 chains where the 4th is added after initial deployment.
-	e := NewEnvironmentWithCRAndJobs(t, logger.TestLogger(t), 4)
-	require.Equal(t, len(e.Nodes), 5)
+	e := NewMemoryEnvironmentWithJobs(t, logger.TestLogger(t), 4)
 	state, err := LoadOnchainState(e.Env, e.Ab)
 	require.NoError(t, err)
 	// Take first non-home chain as the new chain.
@@ -42,15 +42,17 @@ func TestAddChainInbound(t *testing.T) {
 			DeviationPPB:      cciptypes.NewBigIntFromInt64(1e9),
 		},
 	)
-	ab, err := DeployCCIPContracts(e.Env, DeployCCIPContractConfig{
-		HomeChainSel:     e.HomeChainSel,
-		FeedChainSel:     e.FeedChainSel,
-		ChainsToDeploy:   initialDeploy,
-		TokenConfig:      tokenConfig,
-		CCIPOnChainState: state,
+	err = DeployCCIPContracts(e.Env, e.Ab, DeployCCIPContractConfig{
+		HomeChainSel:       e.HomeChainSel,
+		FeedChainSel:       e.FeedChainSel,
+		ChainsToDeploy:     initialDeploy,
+		TokenConfig:        tokenConfig,
+		MCMSConfig:         NewTestMCMSConfig(t, e.Env),
+		FeeTokenContracts:  e.FeeTokenContracts,
+		CapabilityRegistry: state.Chains[e.HomeChainSel].CapabilityRegistry.Address(),
+		OCRSecrets:         deployment.XXXGenerateTestOCRSecrets(),
 	})
 	require.NoError(t, err)
-	require.NoError(t, e.Ab.Merge(ab))
 	state, err = LoadOnchainState(e.Env, e.Ab)
 	require.NoError(t, err)
 
@@ -63,10 +65,15 @@ func TestAddChainInbound(t *testing.T) {
 		}
 	}
 
-	//  Deploy contracts to new chain
-	newAddresses, err := DeployChainContracts(e.Env, e.Env.Chains[newChain], deployment.NewMemoryAddressBook())
+	rmnHomeAddress, err := deployment.SearchAddressBook(e.Ab, e.HomeChainSel, RMNHome)
 	require.NoError(t, err)
-	require.NoError(t, e.Ab.Merge(newAddresses))
+	require.True(t, common.IsHexAddress(rmnHomeAddress))
+	rmnHome, err := rmn_home.NewRMNHome(common.HexToAddress(rmnHomeAddress), e.Env.Chains[e.HomeChainSel].Client)
+	require.NoError(t, err)
+
+	//  Deploy contracts to new chain
+	err = DeployChainContracts(e.Env, e.Env.Chains[newChain], e.Ab, e.FeeTokenContracts[newChain], NewTestMCMSConfig(t, e.Env), rmnHome)
+	require.NoError(t, err)
 	state, err = LoadOnchainState(e.Env, e.Ab)
 	require.NoError(t, err)
 
@@ -95,7 +102,7 @@ func TestAddChainInbound(t *testing.T) {
 	require.NoError(t, err)
 	_, err = deployment.ConfirmIfNoError(e.Env.Chains[e.HomeChainSel], tx, err)
 	require.NoError(t, err)
-	tx, err = state.Chains[e.HomeChainSel].CCIPConfig.TransferOwnership(e.Env.Chains[e.HomeChainSel].DeployerKey, state.Chains[e.HomeChainSel].Timelock.Address())
+	tx, err = state.Chains[e.HomeChainSel].CCIPHome.TransferOwnership(e.Env.Chains[e.HomeChainSel].DeployerKey, state.Chains[e.HomeChainSel].Timelock.Address())
 	require.NoError(t, err)
 	_, err = deployment.ConfirmIfNoError(e.Env.Chains[e.HomeChainSel], tx, err)
 	require.NoError(t, err)
@@ -112,20 +119,54 @@ func TestAddChainInbound(t *testing.T) {
 		require.NoError(t, err2)
 		require.Equal(t, state.Chains[chain].Timelock.Address(), owner)
 	}
-	cfgOwner, err := state.Chains[e.HomeChainSel].CCIPConfig.Owner(nil)
+	cfgOwner, err := state.Chains[e.HomeChainSel].CCIPHome.Owner(nil)
 	require.NoError(t, err)
 	crOwner, err := state.Chains[e.HomeChainSel].CapabilityRegistry.Owner(nil)
 	require.NoError(t, err)
 	require.Equal(t, state.Chains[e.HomeChainSel].Timelock.Address(), cfgOwner)
 	require.Equal(t, state.Chains[e.HomeChainSel].Timelock.Address(), crOwner)
 
+	nodes, err := deployment.NodeInfo(e.Env.NodeIDs, e.Env.Offchain)
+	require.NoError(t, err)
+
 	// Generate and sign inbound proposal to new 4th chain.
-	chainInboundProposal, err := NewChainInboundProposal(e.Env, state, e.HomeChainSel, e.FeedChainSel, newChain, initialDeploy, tokenConfig)
+	chainInboundProposal, err := NewChainInboundProposal(e.Env, state, e.HomeChainSel, newChain, initialDeploy)
 	require.NoError(t, err)
 	chainInboundExec := SignProposal(t, e.Env, chainInboundProposal)
 	for _, sel := range initialDeploy {
 		ExecuteProposal(t, e.Env, chainInboundExec, state, sel)
 	}
+	// TODO This currently is not working - Able to send the request here but request gets stuck in execution
+	// Send a new message and expect that this is delivered once the chain is completely set up as inbound
+	//SendRequest(t, e.Env, state, initialDeploy[0], newChain, true)
+
+	t.Logf("Executing add don and set candidate proposal for commit plugin on chain %d", newChain)
+	addDonProp, err := AddDonAndSetCandidateForCommitProposal(state, e.Env, nodes, deployment.XXXGenerateTestOCRSecrets(), e.HomeChainSel, e.FeedChainSel, newChain, tokenConfig, common.HexToAddress(rmnHomeAddress))
+	require.NoError(t, err)
+
+	addDonExec := SignProposal(t, e.Env, addDonProp)
+	ExecuteProposal(t, e.Env, addDonExec, state, e.HomeChainSel)
+
+	t.Logf("Executing promote candidate proposal for exec plugin on chain %d", newChain)
+	setCandidateForExecProposal, err := SetCandidateExecPluginProposal(state, e.Env, nodes, deployment.XXXGenerateTestOCRSecrets(), e.HomeChainSel, e.FeedChainSel, newChain, tokenConfig, common.HexToAddress(rmnHomeAddress))
+	require.NoError(t, err)
+	setCandidateForExecExec := SignProposal(t, e.Env, setCandidateForExecProposal)
+	ExecuteProposal(t, e.Env, setCandidateForExecExec, state, e.HomeChainSel)
+
+	t.Logf("Executing promote candidate proposal for both commit and exec plugins on chain %d", newChain)
+	donPromoteProposal, err := PromoteCandidateProposal(state, e.HomeChainSel, newChain, nodes)
+	require.NoError(t, err)
+	donPromoteExec := SignProposal(t, e.Env, donPromoteProposal)
+	ExecuteProposal(t, e.Env, donPromoteExec, state, e.HomeChainSel)
+
+	// verify if the configs are updated
+	require.NoError(t, ValidateCCIPHomeConfigSetUp(
+		state.Chains[e.HomeChainSel].CapabilityRegistry,
+		state.Chains[e.HomeChainSel].CCIPHome,
+		newChain,
+	))
+	replayBlocks, err := LatestBlocksByChain(testcontext.Get(t), e.Env.Chains)
+	require.NoError(t, err)
 
 	// Now configure the new chain using deployer key (not transferred to timelock yet).
 	var offRampEnables []offramp.OffRampSourceChainConfigArgs
@@ -144,7 +185,7 @@ func TestAddChainInbound(t *testing.T) {
 	// Set the OCR3 config on new 4th chain to enable the plugin.
 	latestDON, err := LatestCCIPDON(state.Chains[e.HomeChainSel].CapabilityRegistry)
 	require.NoError(t, err)
-	ocrConfigs, err := BuildSetOCR3ConfigArgs(latestDON.Id, state.Chains[e.HomeChainSel].CCIPConfig)
+	ocrConfigs, err := BuildSetOCR3ConfigArgs(latestDON.Id, state.Chains[e.HomeChainSel].CCIPHome, newChain)
 	require.NoError(t, err)
 	tx, err = state.Chains[newChain].OffRamp.SetOCR3Configs(e.Env.Chains[newChain].DeployerKey, ocrConfigs)
 	require.NoError(t, err)
@@ -167,7 +208,7 @@ func TestAddChainInbound(t *testing.T) {
 	}
 	// Ensure job related logs are up to date.
 	time.Sleep(30 * time.Second)
-	require.NoError(t, ReplayAllLogs(e.Nodes, e.Env.Chains))
+	ReplayLogs(t, e.Env.Offchain, replayBlocks)
 
 	// TODO: Send via all inbound lanes and use parallel helper
 	// Now that the proposal has been executed we expect to be able to send traffic to this new 4th chain.
@@ -175,6 +216,11 @@ func TestAddChainInbound(t *testing.T) {
 	require.NoError(t, err)
 	startBlock := latesthdr.Number.Uint64()
 	seqNr := SendRequest(t, e.Env, state, initialDeploy[0], newChain, true)
+	require.NoError(t,
+		ConfirmCommitWithExpectedSeqNumRange(t, e.Env.Chains[initialDeploy[0]], e.Env.Chains[newChain], state.Chains[newChain].OffRamp, &startBlock, cciptypes.SeqNumRange{
+			cciptypes.SeqNum(1),
+			cciptypes.SeqNum(seqNr),
+		}))
 	require.NoError(t,
 		ConfirmExecWithSeqNr(t, e.Env.Chains[initialDeploy[0]], e.Env.Chains[newChain], state.Chains[newChain].OffRamp, &startBlock, seqNr))
 

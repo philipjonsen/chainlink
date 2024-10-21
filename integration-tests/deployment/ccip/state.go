@@ -6,23 +6,26 @@ import (
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/pkg/errors"
-
 	chainsel "github.com/smartcontractkit/chain-selectors"
 
 	"github.com/smartcontractkit/chainlink/integration-tests/deployment"
+	"github.com/smartcontractkit/chainlink/integration-tests/deployment/ccip/view/v1_0"
+	"github.com/smartcontractkit/chainlink/v2/core/gethwrappers/ccip/generated/ccip_config"
+	"github.com/smartcontractkit/chainlink/v2/core/gethwrappers/ccip/generated/commit_store"
+	"github.com/smartcontractkit/chainlink/v2/core/gethwrappers/ccip/generated/rmn_home"
 
 	"github.com/smartcontractkit/chainlink/integration-tests/deployment/ccip/view"
 	"github.com/smartcontractkit/chainlink/integration-tests/deployment/ccip/view/v1_2"
 	"github.com/smartcontractkit/chainlink/integration-tests/deployment/ccip/view/v1_5"
 	"github.com/smartcontractkit/chainlink/integration-tests/deployment/ccip/view/v1_6"
 
-	"github.com/smartcontractkit/chainlink/v2/core/gethwrappers/ccip/generated/ccip_config"
+	"github.com/smartcontractkit/chainlink/v2/core/gethwrappers/ccip/generated/ccip_home"
 	"github.com/smartcontractkit/chainlink/v2/core/gethwrappers/ccip/generated/fee_quoter"
 	"github.com/smartcontractkit/chainlink/v2/core/gethwrappers/ccip/generated/maybe_revert_message_receiver"
 	"github.com/smartcontractkit/chainlink/v2/core/gethwrappers/keystone/generated/capabilities_registry"
 	"github.com/smartcontractkit/chainlink/v2/core/gethwrappers/shared/generated/burn_mint_erc677"
 
-	owner_wrappers "github.com/smartcontractkit/ccip-owner-contracts/tools/gethwrappers"
+	owner_wrappers "github.com/smartcontractkit/ccip-owner-contracts/pkg/gethwrappers"
 
 	"github.com/smartcontractkit/chainlink/v2/core/gethwrappers/ccip/generated/nonce_manager"
 	"github.com/smartcontractkit/chainlink/v2/core/gethwrappers/ccip/generated/offramp"
@@ -35,14 +38,17 @@ import (
 	"github.com/smartcontractkit/chainlink/v2/core/gethwrappers/generated/aggregator_v3_interface"
 )
 
+// CCIPChainState holds a Go binding for all the currently deployed CCIP contracts
+// on a chain. If a binding is nil, it means here is no such contract on the chain.
 type CCIPChainState struct {
 	OnRamp             *onramp.OnRamp
 	OffRamp            *offramp.OffRamp
 	FeeQuoter          *fee_quoter.FeeQuoter
-	ArmProxy           *rmn_proxy_contract.RMNProxyContract
+	RMNProxy           *rmn_proxy_contract.RMNProxyContract
 	NonceManager       *nonce_manager.NonceManager
 	TokenAdminRegistry *token_admin_registry.TokenAdminRegistry
 	Router             *router.Router
+	CommitStore        *commit_store.CommitStore
 	Weth9              *weth9.WETH9
 	RMNRemote          *rmn_remote.RMNRemote
 	// TODO: May need to support older link too
@@ -58,9 +64,15 @@ type CCIPChainState struct {
 
 	// Note we only expect one of these (on the home chain)
 	CapabilityRegistry *capabilities_registry.CapabilitiesRegistry
-	CCIPConfig         *ccip_config.CCIPConfig
-	Mcm                *owner_wrappers.ManyChainMultiSig
+	CCIPHome           *ccip_home.CCIPHome
+	RMNHome            *rmn_home.RMNHome
+	AdminMcm           *owner_wrappers.ManyChainMultiSig
+	BypasserMcm        *owner_wrappers.ManyChainMultiSig
+	CancellerMcm       *owner_wrappers.ManyChainMultiSig
+	ProposerMcm        *owner_wrappers.ManyChainMultiSig
 	Timelock           *owner_wrappers.RBACTimelock
+	// TODO remove once staging upgraded.
+	CCIPConfig *ccip_config.CCIPConfig
 
 	// Test contracts
 	Receiver   *maybe_revert_message_receiver.MaybeRevertMessageReceiver
@@ -116,6 +128,40 @@ func (c CCIPChainState) GenerateView() (view.ChainView, error) {
 		}
 		chainView.OnRamp[c.OnRamp.Address().Hex()] = onRampView
 	}
+
+	if c.OffRamp != nil && c.Router != nil {
+		offRampView, err := v1_6.GenerateOffRampView(
+			c.OffRamp,
+			c.Router,
+		)
+		if err != nil {
+			return chainView, err
+		}
+		chainView.OffRamp[c.OffRamp.Address().Hex()] = offRampView
+	}
+
+	if c.CommitStore != nil {
+		commitStoreView, err := v1_5.GenerateCommitStoreView(c.CommitStore)
+		if err != nil {
+			return chainView, err
+		}
+		chainView.CommitStore[c.CommitStore.Address().Hex()] = commitStoreView
+	}
+
+	if c.RMNProxy != nil {
+		rmnProxyView, err := v1_0.GenerateRMNProxyView(c.RMNProxy)
+		if err != nil {
+			return chainView, err
+		}
+		chainView.RMNProxy[c.RMNProxy.Address().Hex()] = rmnProxyView
+	}
+	if c.CapabilityRegistry != nil {
+		capRegView, err := v1_6.GenerateCapRegView(c.CapabilityRegistry)
+		if err != nil {
+			return chainView, err
+		}
+		chainView.CapabilityRegistry[c.CapabilityRegistry.Address().Hex()] = capRegView
+	}
 	return chainView, nil
 }
 
@@ -159,19 +205,32 @@ func StateView(e deployment.Environment, ab deployment.AddressBook) (view.CCIPVi
 	if err != nil {
 		return view.CCIPView{}, err
 	}
-	return state.View(e.AllChainSelectors())
+	ccipView, err := state.View(e.AllChainSelectors())
+	if err != nil {
+		return view.CCIPView{}, err
+	}
+	ccipView.NodeOperators, err = view.GenerateNopsView(e.NodeIDs, e.Offchain)
+	if err != nil {
+		return ccipView, err
+	}
+	return ccipView, nil
 }
 
 func LoadOnchainState(e deployment.Environment, ab deployment.AddressBook) (CCIPOnChainState, error) {
 	state := CCIPOnChainState{
 		Chains: make(map[uint64]CCIPChainState),
 	}
-	addresses, err := ab.Addresses()
-	if err != nil {
-		return state, errors.Wrap(err, "could not get addresses")
-	}
-	for chainSelector, addresses := range addresses {
-		chainState, err := LoadChainState(e.Chains[chainSelector], addresses)
+	for chainSelector, chain := range e.Chains {
+		addresses, err := ab.AddressesForChain(chainSelector)
+		if err != nil {
+			// Chain not found in address book, initialize empty
+			if errors.Is(err, deployment.ErrChainNotFound) {
+				addresses = make(map[string]deployment.TypeAndVersion)
+			} else {
+				return state, err
+			}
+		}
+		chainState, err := LoadChainState(chain, addresses)
 		if err != nil {
 			return state, err
 		}
@@ -192,12 +251,30 @@ func LoadChainState(chain deployment.Chain, addresses map[string]deployment.Type
 				return state, err
 			}
 			state.Timelock = tl
-		case deployment.NewTypeAndVersion(ManyChainMultisig, deployment.Version1_0_0).String():
+		case deployment.NewTypeAndVersion(AdminManyChainMultisig, deployment.Version1_0_0).String():
 			mcms, err := owner_wrappers.NewManyChainMultiSig(common.HexToAddress(address), chain.Client)
 			if err != nil {
 				return state, err
 			}
-			state.Mcm = mcms
+			state.AdminMcm = mcms
+		case deployment.NewTypeAndVersion(ProposerManyChainMultisig, deployment.Version1_0_0).String():
+			mcms, err := owner_wrappers.NewManyChainMultiSig(common.HexToAddress(address), chain.Client)
+			if err != nil {
+				return state, err
+			}
+			state.ProposerMcm = mcms
+		case deployment.NewTypeAndVersion(BypasserManyChainMultisig, deployment.Version1_0_0).String():
+			mcms, err := owner_wrappers.NewManyChainMultiSig(common.HexToAddress(address), chain.Client)
+			if err != nil {
+				return state, err
+			}
+			state.BypasserMcm = mcms
+		case deployment.NewTypeAndVersion(CancellerManyChainMultisig, deployment.Version1_0_0).String():
+			mcms, err := owner_wrappers.NewManyChainMultiSig(common.HexToAddress(address), chain.Client)
+			if err != nil {
+				return state, err
+			}
+			state.CancellerMcm = mcms
 		case deployment.NewTypeAndVersion(CapabilitiesRegistry, deployment.Version1_0_0).String():
 			cr, err := capabilities_registry.NewCapabilitiesRegistry(common.HexToAddress(address), chain.Client)
 			if err != nil {
@@ -221,13 +298,19 @@ func LoadChainState(chain deployment.Chain, addresses map[string]deployment.Type
 			if err != nil {
 				return state, err
 			}
-			state.ArmProxy = armProxy
+			state.RMNProxy = armProxy
 		case deployment.NewTypeAndVersion(RMNRemote, deployment.Version1_6_0_dev).String():
 			rmnRemote, err := rmn_remote.NewRMNRemote(common.HexToAddress(address), chain.Client)
 			if err != nil {
 				return state, err
 			}
 			state.RMNRemote = rmnRemote
+		case deployment.NewTypeAndVersion(RMNHome, deployment.Version1_6_0_dev).String():
+			rmnHome, err := rmn_home.NewRMNHome(common.HexToAddress(address), chain.Client)
+			if err != nil {
+				return state, err
+			}
+			state.RMNHome = rmnHome
 		case deployment.NewTypeAndVersion(WETH9, deployment.Version1_0_0).String():
 			weth9, err := weth9.NewWETH9(common.HexToAddress(address), chain.Client)
 			if err != nil {
@@ -240,6 +323,12 @@ func LoadChainState(chain deployment.Chain, addresses map[string]deployment.Type
 				return state, err
 			}
 			state.NonceManager = nm
+		case deployment.NewTypeAndVersion(CommitStore, deployment.Version1_5_0).String():
+			cs, err := commit_store.NewCommitStore(common.HexToAddress(address), chain.Client)
+			if err != nil {
+				return state, err
+			}
+			state.CommitStore = cs
 		case deployment.NewTypeAndVersion(TokenAdminRegistry, deployment.Version1_5_0).String():
 			tm, err := token_admin_registry.NewTokenAdminRegistry(common.HexToAddress(address), chain.Client)
 			if err != nil {
@@ -270,12 +359,19 @@ func LoadChainState(chain deployment.Chain, addresses map[string]deployment.Type
 				return state, err
 			}
 			state.LinkToken = lt
-		case deployment.NewTypeAndVersion(CCIPConfig, deployment.Version1_6_0_dev).String():
-			cc, err := ccip_config.NewCCIPConfig(common.HexToAddress(address), chain.Client)
+		case deployment.NewTypeAndVersion(CCIPHome, deployment.Version1_6_0_dev).String():
+			ccipHome, err := ccip_home.NewCCIPHome(common.HexToAddress(address), chain.Client)
 			if err != nil {
 				return state, err
 			}
-			state.CCIPConfig = cc
+			state.CCIPHome = ccipHome
+		case deployment.NewTypeAndVersion(CCIPConfig, deployment.Version1_0_0).String():
+			// TODO: Remove once staging upgraded.
+			ccipConfig, err := ccip_config.NewCCIPConfig(common.HexToAddress(address), chain.Client)
+			if err != nil {
+				return state, err
+			}
+			state.CCIPConfig = ccipConfig
 		case deployment.NewTypeAndVersion(CCIPReceiver, deployment.Version1_0_0).String():
 			mr, err := maybe_revert_message_receiver.NewMaybeRevertMessageReceiver(common.HexToAddress(address), chain.Client)
 			if err != nil {

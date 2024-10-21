@@ -1965,7 +1965,7 @@ AutoCreateKey = true
 BlockBackfillDepth = 10
 BlockBackfillSkip = false
 FinalityDepth = 50
-FinalityTagEnabled = false
+FinalityTagEnabled = true
 LinkContractAddress = '0x514910771AF9Ca656af840dff83E8264EcF986CA'
 LogBackfillBatchSize = 1000
 LogPollInterval = '15s'
@@ -2031,6 +2031,7 @@ MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -2042,6 +2043,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 4
@@ -2133,6 +2135,7 @@ MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -2144,6 +2147,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 4
@@ -2235,6 +2239,7 @@ MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -2246,6 +2251,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 4
@@ -2337,6 +2343,7 @@ MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -2348,6 +2355,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 4
@@ -2375,7 +2383,7 @@ BlockBackfillDepth = 10
 BlockBackfillSkip = false
 ChainType = 'optimismBedrock'
 FinalityDepth = 200
-FinalityTagEnabled = false
+FinalityTagEnabled = true
 LinkContractAddress = '0x350a791Bfc2C21F9Ed5d10980Dad2e2638ffa7f6'
 LogBackfillBatchSize = 1000
 LogPollInterval = '2s'
@@ -2434,12 +2442,18 @@ TransactionPercentile = 60
 [GasEstimator.FeeHistory]
 CacheTimeout = '10s'
 
+[GasEstimator.DAOracle]
+OracleType = 'opstack'
+OracleAddress = '0x420000000000000000000000000000000000000F'
+CustomGasPriceCalldata = ''
+
 [HeadTracker]
 HistoryDepth = 300
 MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -2451,6 +2465,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 1
@@ -2542,6 +2557,7 @@ MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -2553,6 +2569,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 4
@@ -2644,6 +2661,7 @@ MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -2655,6 +2673,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 4
@@ -2747,6 +2766,7 @@ MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -2758,6 +2778,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 4
@@ -2784,7 +2805,7 @@ AutoCreateKey = true
 BlockBackfillDepth = 10
 BlockBackfillSkip = false
 FinalityDepth = 50
-FinalityTagEnabled = false
+FinalityTagEnabled = true
 LinkContractAddress = '0x404460C6A5EdE2D891e8297795264fDe62ADBB75'
 LogBackfillBatchSize = 1000
 LogPollInterval = '3s'
@@ -2849,6 +2870,7 @@ MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -2860,6 +2882,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 4
@@ -2950,6 +2973,7 @@ MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -2961,6 +2985,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 4
@@ -3051,6 +3076,7 @@ MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -3062,6 +3088,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 4
@@ -3088,7 +3115,7 @@ AutoCreateKey = true
 BlockBackfillDepth = 10
 BlockBackfillSkip = false
 FinalityDepth = 50
-FinalityTagEnabled = false
+FinalityTagEnabled = true
 LinkContractAddress = '0x84b9B910527Ad5C03A9Ca831909E21e236EA7b06'
 LogBackfillBatchSize = 1000
 LogPollInterval = '3s'
@@ -3153,6 +3180,7 @@ MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = false
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -3164,6 +3192,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 4
@@ -3256,6 +3285,7 @@ MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -3267,6 +3297,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 4
@@ -3358,6 +3389,7 @@ MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -3369,6 +3401,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 4
@@ -3395,7 +3428,7 @@ AutoCreateKey = true
 BlockBackfillDepth = 10
 BlockBackfillSkip = false
 FinalityDepth = 500
-FinalityTagEnabled = false
+FinalityTagEnabled = true
 LinkContractAddress = '0xb0897686c545045aFc77CF20eC7A532E3120E0F1'
 LogBackfillBatchSize = 1000
 LogPollInterval = '1s'
@@ -3460,6 +3493,7 @@ MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -3471,6 +3505,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 4
@@ -3562,6 +3597,7 @@ MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -3573,6 +3609,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 1
@@ -3664,6 +3701,7 @@ MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -3675,6 +3713,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 1
@@ -3766,6 +3805,7 @@ MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -3777,6 +3817,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 4
@@ -3804,7 +3845,7 @@ BlockBackfillDepth = 10
 BlockBackfillSkip = false
 ChainType = 'kroma'
 FinalityDepth = 400
-FinalityTagEnabled = false
+FinalityTagEnabled = true
 LogBackfillBatchSize = 1000
 LogPollInterval = '2s'
 LogKeepBlocksDepth = 100000
@@ -3862,12 +3903,18 @@ TransactionPercentile = 60
 [GasEstimator.FeeHistory]
 CacheTimeout = '10s'
 
+[GasEstimator.DAOracle]
+OracleType = 'opstack'
+OracleAddress = '0x4200000000000000000000000000000000000005'
+CustomGasPriceCalldata = ''
+
 [HeadTracker]
 HistoryDepth = 400
 MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -3879,6 +3926,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 1
@@ -3964,12 +4012,17 @@ TransactionPercentile = 60
 [GasEstimator.FeeHistory]
 CacheTimeout = '10s'
 
+[GasEstimator.DAOracle]
+OracleType = 'zksync'
+CustomGasPriceCalldata = ''
+
 [HeadTracker]
 HistoryDepth = 50
 MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -3981,6 +4034,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 4
@@ -4047,7 +4101,7 @@ LimitDefault = 500000
 LimitMax = 500000
 LimitMultiplier = '1'
 LimitTransfer = 21000
-EstimateLimit = false
+EstimateLimit = true
 BumpMin = '10 gwei'
 BumpPercent = 20
 BumpThreshold = 0
@@ -4072,6 +4126,7 @@ MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -4083,6 +4138,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 4
@@ -4149,7 +4205,7 @@ LimitDefault = 500000
 LimitMax = 500000
 LimitMultiplier = '1'
 LimitTransfer = 21000
-EstimateLimit = false
+EstimateLimit = true
 BumpMin = '10 gwei'
 BumpPercent = 20
 BumpThreshold = 0
@@ -4174,6 +4230,7 @@ MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -4185,6 +4242,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 4
@@ -4270,12 +4328,17 @@ TransactionPercentile = 60
 [GasEstimator.FeeHistory]
 CacheTimeout = '10s'
 
+[GasEstimator.DAOracle]
+OracleType = 'zksync'
+CustomGasPriceCalldata = ''
+
 [HeadTracker]
 HistoryDepth = 50
 MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -4287,6 +4350,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 4
@@ -4372,12 +4436,17 @@ TransactionPercentile = 60
 [GasEstimator.FeeHistory]
 CacheTimeout = '10s'
 
+[GasEstimator.DAOracle]
+OracleType = 'zksync'
+CustomGasPriceCalldata = ''
+
 [HeadTracker]
 HistoryDepth = 50
 MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -4389,6 +4458,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 4
@@ -4475,12 +4545,18 @@ TransactionPercentile = 60
 [GasEstimator.FeeHistory]
 CacheTimeout = '10s'
 
+[GasEstimator.DAOracle]
+OracleType = 'opstack'
+OracleAddress = '0x420000000000000000000000000000000000000F'
+CustomGasPriceCalldata = ''
+
 [HeadTracker]
 HistoryDepth = 300
 MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -4492,6 +4568,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 1
@@ -4583,6 +4660,7 @@ MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -4594,6 +4672,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 1
@@ -4684,6 +4763,7 @@ MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -4695,6 +4775,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 1
@@ -4722,7 +4803,7 @@ BlockBackfillDepth = 10
 BlockBackfillSkip = false
 ChainType = 'metis'
 FinalityDepth = 10
-FinalityTagEnabled = false
+FinalityTagEnabled = true
 LogBackfillBatchSize = 1000
 LogPollInterval = '15s'
 LogKeepBlocksDepth = 100000
@@ -4786,6 +4867,7 @@ MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -4797,6 +4879,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 1
@@ -4855,16 +4938,16 @@ Enabled = false
 Enabled = true
 
 [GasEstimator]
-Mode = 'BlockHistory'
+Mode = 'FeeHistory'
 PriceDefault = '20 gwei'
 PriceMax = '115792089237316195423570985008687907853269984665.640564039457584007913129639935 tether'
-PriceMin = '100 mwei'
+PriceMin = '0'
 LimitDefault = 500000
 LimitMax = 500000
 LimitMultiplier = '1'
 LimitTransfer = 21000
 EstimateLimit = false
-BumpMin = '100 mwei'
+BumpMin = '5 gwei'
 BumpPercent = 40
 BumpThreshold = 3
 EIP1559DynamicFees = false
@@ -4874,13 +4957,13 @@ TipCapMin = '1 wei'
 
 [GasEstimator.BlockHistory]
 BatchSize = 25
-BlockHistorySize = 12
+BlockHistorySize = 8
 CheckInclusionBlocks = 12
 CheckInclusionPercentile = 90
 TransactionPercentile = 60
 
 [GasEstimator.FeeHistory]
-CacheTimeout = '10s'
+CacheTimeout = '4s'
 
 [HeadTracker]
 HistoryDepth = 2000
@@ -4888,6 +4971,7 @@ MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -4899,6 +4983,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 1
@@ -4926,7 +5011,7 @@ BlockBackfillDepth = 10
 BlockBackfillSkip = false
 ChainType = 'wemix'
 FinalityDepth = 10
-FinalityTagEnabled = false
+FinalityTagEnabled = true
 LogBackfillBatchSize = 1000
 LogPollInterval = '3s'
 LogKeepBlocksDepth = 100000
@@ -4990,6 +5075,7 @@ MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -5001,6 +5087,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 1
@@ -5028,7 +5115,7 @@ BlockBackfillDepth = 10
 BlockBackfillSkip = false
 ChainType = 'wemix'
 FinalityDepth = 10
-FinalityTagEnabled = false
+FinalityTagEnabled = true
 LogBackfillBatchSize = 1000
 LogPollInterval = '3s'
 LogKeepBlocksDepth = 100000
@@ -5092,6 +5179,7 @@ MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = false
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -5103,6 +5191,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 1
@@ -5193,6 +5282,7 @@ MaxBufferSize = 100
 SamplingInterval = '0s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -5204,6 +5294,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 1
@@ -5223,29 +5314,30 @@ GasLimitDefault = 400000
 
 </p></details>
 
-<details><summary>Polygon Zkevm Goerli (1442)</summary><p>
+<details><summary>Soneium Sepolia (1946)</summary><p>
 
 ```toml
 AutoCreateKey = true
 BlockBackfillDepth = 10
 BlockBackfillSkip = false
-ChainType = 'zkevm'
-FinalityDepth = 500
-FinalityTagEnabled = false
+ChainType = 'optimismBedrock'
+FinalityDepth = 200
+FinalityTagEnabled = true
+LinkContractAddress = '0x7ea13478Ea3961A0e8b538cb05a9DF0477c79Cd2'
 LogBackfillBatchSize = 1000
-LogPollInterval = '30s'
+LogPollInterval = '2s'
 LogKeepBlocksDepth = 100000
 LogPrunePageSize = 0
 BackupLogPollerBlockDelay = 100
 MinIncomingConfirmations = 1
 MinContractPayment = '0.00001 link'
 NonceAutoSync = true
-NoNewHeadsThreshold = '12m0s'
+NoNewHeadsThreshold = '40s'
 LogBroadcasterEnabled = true
-RPCDefaultBatchSize = 100
+RPCDefaultBatchSize = 250
 RPCBlockQueryDelay = 1
 FinalizedBlockOffset = 0
-NoNewFinalizedHeadsThreshold = '0s'
+NoNewFinalizedHeadsThreshold = '2h0m0s'
 
 [Transactions]
 ForwardersEnabled = false
@@ -5253,7 +5345,7 @@ MaxInFlight = 16
 MaxQueued = 250
 ReaperInterval = '1h0m0s'
 ReaperThreshold = '168h0m0s'
-ResendAfterThreshold = '3m0s'
+ResendAfterThreshold = '30s'
 
 [Transactions.AutoPurge]
 Enabled = false
@@ -5265,23 +5357,23 @@ Enabled = true
 Mode = 'BlockHistory'
 PriceDefault = '20 gwei'
 PriceMax = '115792089237316195423570985008687907853269984665.640564039457584007913129639935 tether'
-PriceMin = '50 mwei'
+PriceMin = '1 wei'
 LimitDefault = 500000
 LimitMax = 500000
 LimitMultiplier = '1'
 LimitTransfer = 21000
 EstimateLimit = false
-BumpMin = '20 mwei'
-BumpPercent = 40
+BumpMin = '1 mwei'
+BumpPercent = 20
 BumpThreshold = 3
-EIP1559DynamicFees = false
+EIP1559DynamicFees = true
 FeeCapDefault = '100 gwei'
 TipCapDefault = '1 wei'
 TipCapMin = '1 wei'
 
 [GasEstimator.BlockHistory]
 BatchSize = 25
-BlockHistorySize = 12
+BlockHistorySize = 60
 CheckInclusionBlocks = 12
 CheckInclusionPercentile = 90
 TransactionPercentile = 60
@@ -5289,23 +5381,30 @@ TransactionPercentile = 60
 [GasEstimator.FeeHistory]
 CacheTimeout = '10s'
 
+[GasEstimator.DAOracle]
+OracleType = 'opstack'
+OracleAddress = '0x420000000000000000000000000000000000000F'
+CustomGasPriceCalldata = ''
+
 [HeadTracker]
-HistoryDepth = 2000
+HistoryDepth = 300
 MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
 PollInterval = '10s'
 SelectionMode = 'HighestHead'
-SyncThreshold = 5
+SyncThreshold = 10
 LeaseDuration = '0s'
 NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 1
@@ -5317,7 +5416,7 @@ ObservationGracePeriod = '1s'
 
 [OCR2]
 [OCR2.Automation]
-GasLimit = 5400000
+GasLimit = 6500000
 
 [Workflow]
 GasLimitDefault = 400000
@@ -5333,7 +5432,7 @@ BlockBackfillDepth = 10
 BlockBackfillSkip = false
 ChainType = 'kroma'
 FinalityDepth = 400
-FinalityTagEnabled = false
+FinalityTagEnabled = true
 LogBackfillBatchSize = 1000
 LogPollInterval = '2s'
 LogKeepBlocksDepth = 100000
@@ -5391,12 +5490,18 @@ TransactionPercentile = 60
 [GasEstimator.FeeHistory]
 CacheTimeout = '10s'
 
+[GasEstimator.DAOracle]
+OracleType = 'opstack'
+OracleAddress = '0x4200000000000000000000000000000000000005'
+CustomGasPriceCalldata = ''
+
 [HeadTracker]
 HistoryDepth = 400
 MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -5408,6 +5513,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 1
@@ -5466,16 +5572,16 @@ Enabled = false
 Enabled = true
 
 [GasEstimator]
-Mode = 'BlockHistory'
+Mode = 'FeeHistory'
 PriceDefault = '20 gwei'
 PriceMax = '115792089237316195423570985008687907853269984665.640564039457584007913129639935 tether'
-PriceMin = '1 mwei'
+PriceMin = '0'
 LimitDefault = 500000
 LimitMax = 500000
 LimitMultiplier = '1'
 LimitTransfer = 21000
 EstimateLimit = false
-BumpMin = '20 mwei'
+BumpMin = '5 gwei'
 BumpPercent = 40
 BumpThreshold = 3
 EIP1559DynamicFees = false
@@ -5485,13 +5591,13 @@ TipCapMin = '1 wei'
 
 [GasEstimator.BlockHistory]
 BatchSize = 25
-BlockHistorySize = 12
+BlockHistorySize = 8
 CheckInclusionBlocks = 12
 CheckInclusionPercentile = 90
 TransactionPercentile = 60
 
 [GasEstimator.FeeHistory]
-CacheTimeout = '10s'
+CacheTimeout = '4s'
 
 [HeadTracker]
 HistoryDepth = 2000
@@ -5499,6 +5605,7 @@ MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -5510,6 +5617,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 1
@@ -5601,6 +5709,7 @@ MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -5612,6 +5721,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 4
@@ -5702,6 +5812,7 @@ MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -5713,6 +5824,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 1
@@ -5740,7 +5852,7 @@ BlockBackfillDepth = 10
 BlockBackfillSkip = false
 ChainType = 'optimismBedrock'
 FinalityDepth = 200
-FinalityTagEnabled = false
+FinalityTagEnabled = true
 LogBackfillBatchSize = 1000
 LogPollInterval = '2s'
 LogKeepBlocksDepth = 100000
@@ -5798,12 +5910,18 @@ TransactionPercentile = 60
 [GasEstimator.FeeHistory]
 CacheTimeout = '10s'
 
+[GasEstimator.DAOracle]
+OracleType = 'opstack'
+OracleAddress = '0x420000000000000000000000000000000000000F'
+CustomGasPriceCalldata = ''
+
 [HeadTracker]
 HistoryDepth = 300
 MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -5815,6 +5933,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 1
@@ -5906,6 +6025,7 @@ MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -5917,6 +6037,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 4
@@ -6003,12 +6124,17 @@ TransactionPercentile = 60
 [GasEstimator.FeeHistory]
 CacheTimeout = '10s'
 
+[GasEstimator.DAOracle]
+OracleType = 'arbitrum'
+CustomGasPriceCalldata = ''
+
 [HeadTracker]
 HistoryDepth = 100
 MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -6020,6 +6146,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 1
@@ -6106,12 +6233,17 @@ TransactionPercentile = 60
 [GasEstimator.FeeHistory]
 CacheTimeout = '10s'
 
+[GasEstimator.DAOracle]
+OracleType = 'arbitrum'
+CustomGasPriceCalldata = ''
+
 [HeadTracker]
 HistoryDepth = 100
 MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -6123,6 +6255,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 1
@@ -6150,7 +6283,7 @@ BlockBackfillDepth = 10
 BlockBackfillSkip = false
 ChainType = 'arbitrum'
 FinalityDepth = 50
-FinalityTagEnabled = false
+FinalityTagEnabled = true
 LinkContractAddress = '0xf97f4df75117a78c1A5a0DBb814Af92458539FB4'
 LogBackfillBatchSize = 1000
 LogPollInterval = '1s'
@@ -6209,12 +6342,17 @@ TransactionPercentile = 60
 [GasEstimator.FeeHistory]
 CacheTimeout = '10s'
 
+[GasEstimator.DAOracle]
+OracleType = 'arbitrum'
+CustomGasPriceCalldata = ''
+
 [HeadTracker]
 HistoryDepth = 100
 MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -6226,6 +6364,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 1
@@ -6317,6 +6456,7 @@ MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -6328,6 +6468,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 1
@@ -6354,7 +6495,7 @@ AutoCreateKey = true
 BlockBackfillDepth = 10
 BlockBackfillSkip = false
 FinalityDepth = 10
-FinalityTagEnabled = false
+FinalityTagEnabled = true
 LinkContractAddress = '0x0b9d5D9136855f6FEc3c0993feE6E9CE8a297846'
 LogBackfillBatchSize = 1000
 LogPollInterval = '3s'
@@ -6419,6 +6560,7 @@ MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = false
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -6430,6 +6572,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 1
@@ -6456,7 +6599,7 @@ AutoCreateKey = true
 BlockBackfillDepth = 10
 BlockBackfillSkip = false
 FinalityDepth = 10
-FinalityTagEnabled = false
+FinalityTagEnabled = true
 LinkContractAddress = '0x5947BB275c521040051D82396192181b413227A3'
 LogBackfillBatchSize = 1000
 LogPollInterval = '3s'
@@ -6521,6 +6664,7 @@ MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -6532,6 +6676,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 1
@@ -6623,6 +6768,7 @@ MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -6634,6 +6780,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 1
@@ -6646,6 +6793,230 @@ ObservationGracePeriod = '1s'
 [OCR2]
 [OCR2.Automation]
 GasLimit = 5400000
+
+[Workflow]
+GasLimitDefault = 400000
+```
+
+</p></details>
+
+<details><summary>Zircuit Sepolia (48899)</summary><p>
+
+```toml
+AutoCreateKey = true
+BlockBackfillDepth = 10
+BlockBackfillSkip = false
+ChainType = 'zircuit'
+FinalityDepth = 1000
+FinalityTagEnabled = true
+LinkContractAddress = '0xDEE94506570cA186BC1e3516fCf4fd719C312cCD'
+LogBackfillBatchSize = 1000
+LogPollInterval = '2s'
+LogKeepBlocksDepth = 100000
+LogPrunePageSize = 0
+BackupLogPollerBlockDelay = 100
+MinIncomingConfirmations = 3
+MinContractPayment = '0.00001 link'
+NonceAutoSync = true
+NoNewHeadsThreshold = '40s'
+LogBroadcasterEnabled = true
+RPCDefaultBatchSize = 250
+RPCBlockQueryDelay = 1
+FinalizedBlockOffset = 0
+NoNewFinalizedHeadsThreshold = '15m0s'
+
+[Transactions]
+ForwardersEnabled = false
+MaxInFlight = 16
+MaxQueued = 250
+ReaperInterval = '1h0m0s'
+ReaperThreshold = '168h0m0s'
+ResendAfterThreshold = '30s'
+
+[Transactions.AutoPurge]
+Enabled = true
+Threshold = 90
+MinAttempts = 3
+
+[BalanceMonitor]
+Enabled = true
+
+[GasEstimator]
+Mode = 'BlockHistory'
+PriceDefault = '20 gwei'
+PriceMax = '115792089237316195423570985008687907853269984665.640564039457584007913129639935 tether'
+PriceMin = '1 wei'
+LimitDefault = 500000
+LimitMax = 500000
+LimitMultiplier = '1'
+LimitTransfer = 21000
+EstimateLimit = false
+BumpMin = '100 wei'
+BumpPercent = 20
+BumpThreshold = 3
+EIP1559DynamicFees = true
+FeeCapDefault = '100 gwei'
+TipCapDefault = '1 wei'
+TipCapMin = '1 wei'
+
+[GasEstimator.BlockHistory]
+BatchSize = 25
+BlockHistorySize = 60
+CheckInclusionBlocks = 12
+CheckInclusionPercentile = 90
+TransactionPercentile = 60
+
+[GasEstimator.FeeHistory]
+CacheTimeout = '10s'
+
+[GasEstimator.DAOracle]
+OracleType = 'opstack'
+OracleAddress = '0x420000000000000000000000000000000000000F'
+CustomGasPriceCalldata = ''
+
+[HeadTracker]
+HistoryDepth = 2000
+MaxBufferSize = 3
+SamplingInterval = '1s'
+MaxAllowedFinalityDepth = 10000
+FinalityTagBypass = true
+PersistenceEnabled = true
+
+[NodePool]
+PollFailureThreshold = 5
+PollInterval = '10s'
+SelectionMode = 'HighestHead'
+SyncThreshold = 10
+LeaseDuration = '0s'
+NodeIsSyncingEnabled = false
+FinalizedBlockPollInterval = '5s'
+EnforceRepeatableRead = false
+DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
+
+[OCR]
+ContractConfirmations = 1
+ContractTransmitterTransmitTimeout = '10s'
+DatabaseTimeout = '10s'
+DeltaCOverride = '168h0m0s'
+DeltaCJitterOverride = '1h0m0s'
+ObservationGracePeriod = '1s'
+
+[OCR2]
+[OCR2.Automation]
+GasLimit = 6500000
+
+[Workflow]
+GasLimitDefault = 400000
+```
+
+</p></details>
+
+<details><summary>Zircuit Mainnet (48900)</summary><p>
+
+```toml
+AutoCreateKey = true
+BlockBackfillDepth = 10
+BlockBackfillSkip = false
+ChainType = 'zircuit'
+FinalityDepth = 1000
+FinalityTagEnabled = true
+LinkContractAddress = '0x5D6d033B4FbD2190D99D930719fAbAcB64d2439a'
+LogBackfillBatchSize = 1000
+LogPollInterval = '2s'
+LogKeepBlocksDepth = 100000
+LogPrunePageSize = 0
+BackupLogPollerBlockDelay = 100
+MinIncomingConfirmations = 3
+MinContractPayment = '0.00001 link'
+NonceAutoSync = true
+NoNewHeadsThreshold = '40s'
+LogBroadcasterEnabled = true
+RPCDefaultBatchSize = 250
+RPCBlockQueryDelay = 1
+FinalizedBlockOffset = 0
+NoNewFinalizedHeadsThreshold = '15m0s'
+
+[Transactions]
+ForwardersEnabled = false
+MaxInFlight = 16
+MaxQueued = 250
+ReaperInterval = '1h0m0s'
+ReaperThreshold = '168h0m0s'
+ResendAfterThreshold = '30s'
+
+[Transactions.AutoPurge]
+Enabled = true
+Threshold = 90
+MinAttempts = 3
+
+[BalanceMonitor]
+Enabled = true
+
+[GasEstimator]
+Mode = 'BlockHistory'
+PriceDefault = '20 gwei'
+PriceMax = '115792089237316195423570985008687907853269984665.640564039457584007913129639935 tether'
+PriceMin = '1 wei'
+LimitDefault = 500000
+LimitMax = 500000
+LimitMultiplier = '1'
+LimitTransfer = 21000
+EstimateLimit = false
+BumpMin = '100 wei'
+BumpPercent = 20
+BumpThreshold = 3
+EIP1559DynamicFees = true
+FeeCapDefault = '100 gwei'
+TipCapDefault = '1 wei'
+TipCapMin = '1 wei'
+
+[GasEstimator.BlockHistory]
+BatchSize = 25
+BlockHistorySize = 24
+CheckInclusionBlocks = 12
+CheckInclusionPercentile = 90
+TransactionPercentile = 60
+
+[GasEstimator.FeeHistory]
+CacheTimeout = '10s'
+
+[GasEstimator.DAOracle]
+OracleType = 'opstack'
+OracleAddress = '0x420000000000000000000000000000000000000F'
+CustomGasPriceCalldata = ''
+
+[HeadTracker]
+HistoryDepth = 2000
+MaxBufferSize = 3
+SamplingInterval = '1s'
+MaxAllowedFinalityDepth = 10000
+FinalityTagBypass = true
+PersistenceEnabled = true
+
+[NodePool]
+PollFailureThreshold = 5
+PollInterval = '10s'
+SelectionMode = 'HighestHead'
+SyncThreshold = 10
+LeaseDuration = '0s'
+NodeIsSyncingEnabled = false
+FinalizedBlockPollInterval = '5s'
+EnforceRepeatableRead = false
+DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
+
+[OCR]
+ContractConfirmations = 1
+ContractTransmitterTransmitTimeout = '10s'
+DatabaseTimeout = '10s'
+DeltaCOverride = '168h0m0s'
+DeltaCJitterOverride = '1h0m0s'
+ObservationGracePeriod = '1s'
+
+[OCR2]
+[OCR2.Automation]
+GasLimit = 6500000
 
 [Workflow]
 GasLimitDefault = 400000
@@ -6724,6 +7095,7 @@ MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -6735,6 +7107,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 4
@@ -6825,6 +7198,7 @@ MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -6836,6 +7210,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 4
@@ -6926,6 +7301,7 @@ MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -6937,6 +7313,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 4
@@ -6964,7 +7341,7 @@ BlockBackfillDepth = 10
 BlockBackfillSkip = false
 ChainType = 'metis'
 FinalityDepth = 10
-FinalityTagEnabled = false
+FinalityTagEnabled = true
 LogBackfillBatchSize = 1000
 LogPollInterval = '15s'
 LogKeepBlocksDepth = 100000
@@ -7028,6 +7405,7 @@ MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -7039,6 +7417,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 1
@@ -7130,6 +7509,7 @@ MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -7141,6 +7521,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 4
@@ -7231,6 +7612,7 @@ MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -7242,6 +7624,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 4
@@ -7327,12 +7710,18 @@ TransactionPercentile = 60
 [GasEstimator.FeeHistory]
 CacheTimeout = '10s'
 
+[GasEstimator.DAOracle]
+OracleType = 'opstack'
+OracleAddress = '0x420000000000000000000000000000000000000F'
+CustomGasPriceCalldata = ''
+
 [HeadTracker]
 HistoryDepth = 300
 MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -7344,6 +7733,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 1
@@ -7371,7 +7761,7 @@ BlockBackfillDepth = 10
 BlockBackfillSkip = false
 ChainType = 'optimismBedrock'
 FinalityDepth = 200
-FinalityTagEnabled = false
+FinalityTagEnabled = true
 LogBackfillBatchSize = 1000
 LogPollInterval = '2s'
 LogKeepBlocksDepth = 100000
@@ -7429,12 +7819,18 @@ TransactionPercentile = 60
 [GasEstimator.FeeHistory]
 CacheTimeout = '10s'
 
+[GasEstimator.DAOracle]
+OracleType = 'opstack'
+OracleAddress = '0x420000000000000000000000000000000000000F'
+CustomGasPriceCalldata = ''
+
 [HeadTracker]
 HistoryDepth = 300
 MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -7446,6 +7842,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 1
@@ -7532,12 +7929,17 @@ TransactionPercentile = 60
 [GasEstimator.FeeHistory]
 CacheTimeout = '10s'
 
+[GasEstimator.DAOracle]
+OracleType = 'arbitrum'
+CustomGasPriceCalldata = ''
+
 [HeadTracker]
 HistoryDepth = 100
 MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -7549,6 +7951,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 1
@@ -7635,12 +8038,17 @@ TransactionPercentile = 60
 [GasEstimator.FeeHistory]
 CacheTimeout = '10s'
 
+[GasEstimator.DAOracle]
+OracleType = 'arbitrum'
+CustomGasPriceCalldata = ''
+
 [HeadTracker]
 HistoryDepth = 100
 MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -7652,6 +8060,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 1
@@ -7679,7 +8088,7 @@ BlockBackfillDepth = 10
 BlockBackfillSkip = false
 ChainType = 'arbitrum'
 FinalityDepth = 50
-FinalityTagEnabled = false
+FinalityTagEnabled = true
 LogBackfillBatchSize = 1000
 LogPollInterval = '1s'
 LogKeepBlocksDepth = 100000
@@ -7737,12 +8146,17 @@ TransactionPercentile = 60
 [GasEstimator.FeeHistory]
 CacheTimeout = '10s'
 
+[GasEstimator.DAOracle]
+OracleType = 'arbitrum'
+CustomGasPriceCalldata = ''
+
 [HeadTracker]
 HistoryDepth = 100
 MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -7754,6 +8168,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 1
@@ -7839,12 +8254,18 @@ TransactionPercentile = 60
 [GasEstimator.FeeHistory]
 CacheTimeout = '10s'
 
+[GasEstimator.DAOracle]
+OracleType = 'opstack'
+OracleAddress = '0x5300000000000000000000000000000000000002'
+CustomGasPriceCalldata = ''
+
 [HeadTracker]
 HistoryDepth = 50
 MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -7856,6 +8277,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 1
@@ -7941,12 +8363,18 @@ TransactionPercentile = 60
 [GasEstimator.FeeHistory]
 CacheTimeout = '10s'
 
+[GasEstimator.DAOracle]
+OracleType = 'opstack'
+OracleAddress = '0x5300000000000000000000000000000000000002'
+CustomGasPriceCalldata = ''
+
 [HeadTracker]
 HistoryDepth = 50
 MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -7958,6 +8386,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 1
@@ -7984,7 +8413,7 @@ AutoCreateKey = true
 BlockBackfillDepth = 10
 BlockBackfillSkip = false
 FinalityDepth = 50
-FinalityTagEnabled = false
+FinalityTagEnabled = true
 LinkContractAddress = '0x779877A7B0D9E8603169DdbD7836e478b4624789'
 LogBackfillBatchSize = 1000
 LogPollInterval = '15s'
@@ -8049,6 +8478,7 @@ MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = false
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -8060,6 +8490,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 4
@@ -8087,7 +8518,7 @@ BlockBackfillDepth = 10
 BlockBackfillSkip = false
 ChainType = 'optimismBedrock'
 FinalityDepth = 200
-FinalityTagEnabled = false
+FinalityTagEnabled = true
 LogBackfillBatchSize = 1000
 LogPollInterval = '2s'
 LogKeepBlocksDepth = 100000
@@ -8145,12 +8576,18 @@ TransactionPercentile = 60
 [GasEstimator.FeeHistory]
 CacheTimeout = '10s'
 
+[GasEstimator.DAOracle]
+OracleType = 'opstack'
+OracleAddress = '0x420000000000000000000000000000000000000F'
+CustomGasPriceCalldata = ''
+
 [HeadTracker]
 HistoryDepth = 300
 MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -8162,6 +8599,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 1
@@ -8253,6 +8691,7 @@ MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -8264,6 +8703,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 4
@@ -8355,6 +8795,7 @@ MaxBufferSize = 3
 SamplingInterval = '1s'
 MaxAllowedFinalityDepth = 10000
 FinalityTagBypass = true
+PersistenceEnabled = true
 
 [NodePool]
 PollFailureThreshold = 5
@@ -8366,6 +8807,7 @@ NodeIsSyncingEnabled = false
 FinalizedBlockPollInterval = '5s'
 EnforceRepeatableRead = false
 DeathDeclarationDelay = '10s'
+NewHeadsPollInterval = '0s'
 
 [OCR]
 ContractConfirmations = 4
@@ -8902,6 +9344,33 @@ TipCapMinimum is the minimum gas tip to use when submitting transactions to the 
 
 (Only applies to EIP-1559 transactions)
 
+## EVM.GasEstimator.DAOracle
+```toml
+[EVM.GasEstimator.DAOracle]
+OracleType = 'opstack' # Example
+OracleAddress = '0x420000000000000000000000000000000000000F' # Example
+CustomGasPriceCalldata = '' # Default
+```
+
+
+### OracleType
+```toml
+OracleType = 'opstack' # Example
+```
+OracleType refers to the oracle family this config belongs to. Currently the available oracle types are: 'opstack', 'arbitrum', and 'zksync'.
+
+### OracleAddress
+```toml
+OracleAddress = '0x420000000000000000000000000000000000000F' # Example
+```
+OracleAddress is the address of the oracle contract.
+
+### CustomGasPriceCalldata
+```toml
+CustomGasPriceCalldata = '' # Default
+```
+CustomGasPriceCalldata is optional and can be set to call a custom gas price function at the given OracleAddress.
+
 ## EVM.GasEstimator.LimitJobType
 ```toml
 [EVM.GasEstimator.LimitJobType]
@@ -9044,6 +9513,7 @@ MaxBufferSize = 3 # Default
 SamplingInterval = '1s' # Default
 FinalityTagBypass = true # Default
 MaxAllowedFinalityDepth = 10000 # Default
+PersistenceEnabled = true # Default
 ```
 The head tracker continually listens for new heads from the chain.
 
@@ -9090,6 +9560,15 @@ MaxAllowedFinalityDepth - defines maximum number of blocks between the most rece
 If actual finality depth exceeds this number, HeadTracker aborts backfill and returns an error.
 Has no effect if `FinalityTagsEnabled` = false
 
+### PersistenceEnabled
+```toml
+PersistenceEnabled = true # Default
+```
+PersistenceEnabled defines whether HeadTracker needs to store heads in the database.
+Persistence is helpful on chains with large finality depth, where fetching blocks from the latest to the latest finalized takes a lot of time.
+On chains with fast finality, the persistence layer does not improve the chain's load time and only consumes database resources (mainly IO).
+NOTE: persistence should not be disabled for products that use LogBroadcaster, as it might lead to missed on-chain events.
+
 ## EVM.KeySpecific
 ```toml
 [[EVM.KeySpecific]]
@@ -9122,6 +9601,7 @@ NodeIsSyncingEnabled = false # Default
 FinalizedBlockPollInterval = '5s' # Default
 EnforceRepeatableRead = false # Default
 DeathDeclarationDelay = '10s' # Default
+NewHeadsPollInterval = '0s' # Default
 ```
 The node pool manages multiple RPC endpoints.
 
@@ -9213,6 +9693,14 @@ DeathDeclarationDelay defines the minimum duration an RPC must be in unhealthy s
 Larger values might be helpful to reduce the noisiness of health checks like `EnforceRepeatableRead = true', which might be falsely
 trigger declaration of `FinalizedBlockOutOfSync` due to insignificant network delays in broadcasting of the finalized state among RPCs.
 RPC will not be picked to handle a request even if this option is set to a nonzero value.
+
+### NewHeadsPollInterval
+```toml
+NewHeadsPollInterval = '0s' # Default
+```
+NewHeadsPollInterval define an interval for polling new block periodically using http client rather than subscribe to ws feed
+
+Set to 0 to disable.
 
 ## EVM.NodePool.Errors
 :warning: **_ADVANCED_**: _Do not change these settings unless you know what you are doing._
@@ -9399,7 +9887,7 @@ Name is a unique (per-chain) identifier for this node.
 ```toml
 WSURL = 'wss://web.socket/test' # Example
 ```
-WSURL is the WS(S) endpoint for this node. Required for primary nodes.
+WSURL is the WS(S) endpoint for this node. Required for primary nodes when `LogBroadcasterEnabled` is `true`
 
 ### HTTPURL
 ```toml
@@ -9597,6 +10085,8 @@ ComputeUnitPriceMin = 0 # Default
 ComputeUnitPriceDefault = 0 # Default
 FeeBumpPeriod = '3s' # Default
 BlockHistoryPollPeriod = '5s' # Default
+ComputeUnitLimitDefault = 200_000 # Default
+EstimateComputeUnitLimit = false # Default
 ```
 
 
@@ -9709,11 +10199,135 @@ BlockHistoryPollPeriod = '5s' # Default
 ```
 BlockHistoryPollPeriod is the rate to poll for blocks in the block history fee estimator
 
+### ComputeUnitLimitDefault
+```toml
+ComputeUnitLimitDefault = 200_000 # Default
+```
+ComputeUnitLimitDefault is the compute units limit applied to transactions unless overriden during the txm enqueue
+
+### EstimateComputeUnitLimit
+```toml
+EstimateComputeUnitLimit = false # Default
+```
+EstimateComputeUnitLimit enables or disables compute unit limit estimations per transaction. If estimations return 0 used compute, the ComputeUnitLimitDefault value is used, if set.
+
+## Solana.MultiNode
+```toml
+[Solana.MultiNode]
+Enabled = false # Default
+PollFailureThreshold = 5 # Default
+PollInterval = '10s' # Default
+SelectionMode = 'PriorityLevel' # Default
+SyncThreshold = 5 # Default
+NodeIsSyncingEnabled = false # Default
+LeaseDuration = '1m0s' # Default
+FinalizedBlockPollInterval = '10s' # Default
+EnforceRepeatableRead = true # Default
+DeathDeclarationDelay = '10s' # Default
+NodeNoNewHeadsThreshold = '10s' # Default
+NoNewFinalizedHeadsThreshold = '10s' # Default
+FinalityDepth = 0 # Default
+FinalityTagEnabled = true # Default
+FinalizedBlockOffset = 0 # Default
+```
+
+
+### Enabled
+```toml
+Enabled = false # Default
+```
+Enabled enables the multinode feature.
+
+### PollFailureThreshold
+```toml
+PollFailureThreshold = 5 # Default
+```
+PollFailureThreshold is the number of consecutive poll failures before a node is considered unhealthy.
+
+### PollInterval
+```toml
+PollInterval = '10s' # Default
+```
+PollInterval is the rate to poll for node health.
+
+### SelectionMode
+```toml
+SelectionMode = 'PriorityLevel' # Default
+```
+SelectionMode is the method used to select the next best node to use.
+
+### SyncThreshold
+```toml
+SyncThreshold = 5 # Default
+```
+SyncThreshold is the number of blocks behind the best node that a node can be before it is considered out of sync.
+
+### NodeIsSyncingEnabled
+```toml
+NodeIsSyncingEnabled = false # Default
+```
+NodeIsSyncingEnabled enables the feature to avoid sending transactions to nodes that are syncing. Not relavant for Solana.
+
+### LeaseDuration
+```toml
+LeaseDuration = '1m0s' # Default
+```
+LeaseDuration is the max duration a node can be leased for.
+
+### FinalizedBlockPollInterval
+```toml
+FinalizedBlockPollInterval = '10s' # Default
+```
+FinalizedBlockPollInterval is the rate to poll for the finalized block.
+
+### EnforceRepeatableRead
+```toml
+EnforceRepeatableRead = true # Default
+```
+EnforceRepeatableRead enforces the repeatable read guarantee for multinode.
+
+### DeathDeclarationDelay
+```toml
+DeathDeclarationDelay = '10s' # Default
+```
+DeathDeclarationDelay is the duration to wait before declaring a node dead.
+
+### NodeNoNewHeadsThreshold
+```toml
+NodeNoNewHeadsThreshold = '10s' # Default
+```
+NodeNoNewHeadsThreshold is the duration to wait before declaring a node unhealthy due to no new heads.
+
+### NoNewFinalizedHeadsThreshold
+```toml
+NoNewFinalizedHeadsThreshold = '10s' # Default
+```
+NoNewFinalizedHeadsThreshold is the duration to wait before declaring a node unhealthy due to no new finalized heads.
+
+### FinalityDepth
+```toml
+FinalityDepth = 0 # Default
+```
+FinalityDepth is not used when finality tags are enabled.
+
+### FinalityTagEnabled
+```toml
+FinalityTagEnabled = true # Default
+```
+FinalityTagEnabled enables the use of finality tags.
+
+### FinalizedBlockOffset
+```toml
+FinalizedBlockOffset = 0 # Default
+```
+FinalizedBlockOffset is the offset from the finalized block to use for finality tags.
+
 ## Solana.Nodes
 ```toml
 [[Solana.Nodes]]
 Name = 'primary' # Example
 URL = 'http://solana.web' # Example
+SendOnly = false # Default
 ```
 
 
@@ -9728,6 +10342,12 @@ Name is a unique (per-chain) identifier for this node.
 URL = 'http://solana.web' # Example
 ```
 URL is the HTTP(S) endpoint for this node.
+
+### SendOnly
+```toml
+SendOnly = false # Default
+```
+SendOnly is a multinode config that only sends transactions to a node and does not read state
 
 ## Starknet
 ```toml

@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/ethereum/go-ethereum"
-	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/rpc"
 
 	"github.com/smartcontractkit/chainlink-common/pkg/services"
@@ -16,7 +15,9 @@ import (
 	"github.com/smartcontractkit/chainlink-common/pkg/logger"
 
 	"github.com/smartcontractkit/chainlink/v2/core/chains/evm/assets"
+	evmconfig "github.com/smartcontractkit/chainlink/v2/core/chains/evm/config"
 	"github.com/smartcontractkit/chainlink/v2/core/chains/evm/config/chaintype"
+	"github.com/smartcontractkit/chainlink/v2/core/chains/evm/config/toml"
 )
 
 // L1Oracle provides interface for fetching L1-specific fee components if the chain is an L2.
@@ -25,8 +26,6 @@ type L1Oracle interface {
 	services.Service
 
 	GasPrice(ctx context.Context) (*assets.Wei, error)
-	GetGasCost(ctx context.Context, tx *types.Transaction, blockNum *big.Int) (*assets.Wei, error)
-	ChainType(ctx context.Context) chaintype.ChainType
 }
 
 type l1OracleClient interface {
@@ -50,15 +49,31 @@ func IsRollupWithL1Support(chainType chaintype.ChainType) bool {
 	return slices.Contains(supportedChainTypes, chainType)
 }
 
-func NewL1GasOracle(lggr logger.Logger, ethClient l1OracleClient, chainType chaintype.ChainType) (L1Oracle, error) {
+func NewL1GasOracle(lggr logger.Logger, ethClient l1OracleClient, chainType chaintype.ChainType, daOracle evmconfig.DAOracle) (L1Oracle, error) {
 	if !IsRollupWithL1Support(chainType) {
 		return nil, nil
 	}
 	var l1Oracle L1Oracle
 	var err error
+	if daOracle != nil {
+		switch daOracle.OracleType() {
+		case toml.DAOracleOPStack:
+			l1Oracle, err = NewOpStackL1GasOracle(lggr, ethClient, chainType, daOracle)
+		case toml.DAOracleArbitrum:
+			l1Oracle, err = NewArbitrumL1GasOracle(lggr, ethClient)
+		case toml.DAOracleZKSync:
+			l1Oracle = NewZkSyncL1GasOracle(lggr, ethClient)
+		}
+		if err != nil {
+			return nil, fmt.Errorf("failed to initialize L1 oracle for chaintype %s: %w", chainType, err)
+		}
+		if l1Oracle != nil {
+			return l1Oracle, nil
+		}
+	}
+
+	// Going forward all configs should specify a DAOracle config. This is a fall back to maintain backwards compat.
 	switch chainType {
-	case chaintype.ChainOptimismBedrock, chaintype.ChainKroma, chaintype.ChainScroll, chaintype.ChainMantle:
-		l1Oracle, err = NewOpStackL1GasOracle(lggr, ethClient, chainType)
 	case chaintype.ChainArbitrum:
 		l1Oracle, err = NewArbitrumL1GasOracle(lggr, ethClient)
 	case chaintype.ChainZkSync:
