@@ -207,8 +207,10 @@ type RelayConfig struct {
 	SendingKeys pq.StringArray `json:"sendingKeys"`
 
 	// Mercury-specific
-	FeedID                  *common.Hash `json:"feedID"`
-	EnableTriggerCapability bool         `json:"enableTriggerCapability"`
+	FeedID                   *common.Hash `json:"feedID"`
+	EnableTriggerCapability  bool         `json:"enableTriggerCapability"`
+	TriggerCapabilityName    string       `json:"triggerCapabilityName"`
+	TriggerCapabilityVersion string       `json:"triggerCapabilityVersion"`
 
 	// LLO-specific
 	LLODONID      uint32        `json:"lloDonID" toml:"lloDonID"`
@@ -233,7 +235,7 @@ func NewRelayOpts(args types.RelayArgs) *RelayOpts {
 
 func (o *RelayOpts) RelayConfig() (RelayConfig, error) {
 	var empty RelayConfig
-	//TODO this should be done once and the error should be cached
+	// TODO this should be done once and the error should be cached
 	if o.c == nil {
 		var c RelayConfig
 		err := json.Unmarshal(o.RelayArgs.RelayConfig, &c)

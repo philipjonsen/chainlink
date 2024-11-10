@@ -14,9 +14,11 @@ import (
 	"github.com/smartcontractkit/chainlink-common/pkg/types/core"
 	"github.com/smartcontractkit/chainlink/v2/core/capabilities/compute"
 	gatewayconnector "github.com/smartcontractkit/chainlink/v2/core/capabilities/gateway_connector"
-	trigger "github.com/smartcontractkit/chainlink/v2/core/capabilities/webapi"
+	"github.com/smartcontractkit/chainlink/v2/core/capabilities/webapi"
 	webapitarget "github.com/smartcontractkit/chainlink/v2/core/capabilities/webapi/target"
+	"github.com/smartcontractkit/chainlink/v2/core/capabilities/webapi/trigger"
 	"github.com/smartcontractkit/chainlink/v2/core/logger"
+	"github.com/smartcontractkit/chainlink/v2/core/services/gateway/handlers/capabilities"
 	"github.com/smartcontractkit/chainlink/v2/core/services/job"
 	"github.com/smartcontractkit/chainlink/v2/core/services/keystore"
 	"github.com/smartcontractkit/chainlink/v2/core/services/keystore/chaintype"
@@ -112,31 +114,27 @@ func (d *Delegate) ServicesForSpec(ctx context.Context, spec job.Job) ([]job.Ser
 		return nil, fmt.Errorf("failed to create relayer set: %w", err)
 	}
 
-	ocrKeyBundles, err := d.ks.OCR2().GetAll()
+	ocrEvmKeyBundles, err := d.ks.OCR2().GetAllOfType(chaintype.EVM)
 	if err != nil {
 		return nil, err
 	}
 
-	if len(ocrKeyBundles) > 1 {
-		return nil, fmt.Errorf("expected exactly one OCR key bundle, but found: %d", len(ocrKeyBundles))
-	}
-
-	var ocrKeyBundle ocr2key.KeyBundle
-	if len(ocrKeyBundles) == 0 {
-		ocrKeyBundle, err = d.ks.OCR2().Create(ctx, chaintype.EVM)
+	var ocrEvmKeyBundle ocr2key.KeyBundle
+	if len(ocrEvmKeyBundles) == 0 {
+		ocrEvmKeyBundle, err = d.ks.OCR2().Create(ctx, chaintype.EVM)
 		if err != nil {
 			return nil, errors.Wrap(err, "failed to create OCR key bundle")
 		}
 	} else {
-		ocrKeyBundle = ocrKeyBundles[0]
+		if len(ocrEvmKeyBundles) > 1 {
+			log.Infof("found %d EVM OCR key bundles, which may cause unexpected behavior if using the OracleFactory", len(ocrEvmKeyBundles))
+		}
+		ocrEvmKeyBundle = ocrEvmKeyBundles[0]
 	}
 
 	ethKeyBundles, err := d.ks.Eth().GetAll(ctx)
 	if err != nil {
 		return nil, err
-	}
-	if len(ethKeyBundles) > 1 {
-		return nil, fmt.Errorf("expected exactly one ETH key bundle, but found: %d", len(ethKeyBundles))
 	}
 
 	var ethKeyBundle ethkey.KeyV2
@@ -146,6 +144,9 @@ func (d *Delegate) ServicesForSpec(ctx context.Context, spec job.Job) ([]job.Ser
 			return nil, errors.Wrap(err, "failed to create ETH key bundle")
 		}
 	} else {
+		if len(ethKeyBundles) > 1 {
+			log.Infof("found %d ETH key bundles, which may cause unexpected behavior if using the OracleFactory", len(ethKeyBundles))
+		}
 		ethKeyBundle = ethKeyBundles[0]
 	}
 
@@ -157,7 +158,7 @@ func (d *Delegate) ServicesForSpec(ctx context.Context, spec job.Job) ([]job.Ser
 			JobORM:        d.jobORM,
 			JobID:         spec.ID,
 			JobName:       spec.Name.ValueOrZero(),
-			KB:            ocrKeyBundle,
+			KB:            ocrEvmKeyBundle,
 			Config:        spec.StandardCapabilitiesSpec.OracleFactory,
 			PeerWrapper:   d.peerWrapper,
 			RelayerSet:    relayerSet,
@@ -178,7 +179,7 @@ func (d *Delegate) ServicesForSpec(ctx context.Context, spec job.Job) ([]job.Ser
 			JobORM:        d.jobORM,
 			JobID:         spec.ID,
 			JobName:       spec.Name.ValueOrZero(),
-			KB:            ocrKeyBundle,
+			KB:            ocrEvmKeyBundle,
 			Config:        spec.StandardCapabilitiesSpec.OracleFactory,
 			PeerWrapper:   d.peerWrapper,
 			RelayerSet:    relayerSet,
@@ -210,13 +211,13 @@ func (d *Delegate) ServicesForSpec(ctx context.Context, spec job.Job) ([]job.Ser
 		if len(spec.StandardCapabilitiesSpec.Config) == 0 {
 			return nil, errors.New("config is empty")
 		}
-		var targetCfg webapitarget.ServiceConfig
+		var targetCfg webapi.ServiceConfig
 		err := toml.Unmarshal([]byte(spec.StandardCapabilitiesSpec.Config), &targetCfg)
 		if err != nil {
 			return nil, err
 		}
 		lggr := d.logger.Named("WebAPITarget")
-		handler, err := webapitarget.NewConnectorHandler(connector, targetCfg, lggr)
+		handler, err := webapi.NewOutgoingConnectorHandler(connector, targetCfg, capabilities.MethodWebAPITarget, lggr)
 		if err != nil {
 			return nil, err
 		}
@@ -228,7 +229,31 @@ func (d *Delegate) ServicesForSpec(ctx context.Context, spec job.Job) ([]job.Ser
 	}
 
 	if spec.StandardCapabilitiesSpec.Command == commandOverrideForCustomComputeAction {
-		computeSrvc := compute.NewAction(log, d.registry)
+		if d.gatewayConnectorWrapper == nil {
+			return nil, errors.New("gateway connector is required for custom compute capability")
+		}
+
+		if len(spec.StandardCapabilitiesSpec.Config) == 0 {
+			return nil, errors.New("config is empty")
+		}
+
+		var fetchCfg webapi.ServiceConfig
+		err := toml.Unmarshal([]byte(spec.StandardCapabilitiesSpec.Config), &fetchCfg)
+		if err != nil {
+			return nil, err
+		}
+		lggr := d.logger.Named("ComputeAction")
+
+		handler, err := webapi.NewOutgoingConnectorHandler(d.gatewayConnectorWrapper.GetGatewayConnector(), fetchCfg, capabilities.MethodComputeAction, lggr)
+		if err != nil {
+			return nil, err
+		}
+
+		idGeneratorFn := func() string {
+			return uuid.New().String()
+		}
+
+		computeSrvc := compute.NewAction(fetchCfg, log, d.registry, handler, idGeneratorFn)
 		return []job.ServiceCtx{computeSrvc}, nil
 	}
 
